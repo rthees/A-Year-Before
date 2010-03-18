@@ -1,0 +1,67 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: A year before\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2007-12-04 19:58+0100\n"
+"Last-Translator: Ralf Thees <ralf@wuerzblog.de>\n"
+"Language-Team:  <ralf@wuerzblog.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: /home/ralf/\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SearchPath-0: wp213/wp-content/plugins/a-year-before\n"
+
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:33
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:148
+msgid "A year ago"
+msgstr "Vor einem Jahr"
+
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:48
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:148
+msgid "Y-m-d"
+msgstr "d.m.Y"
+
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:49
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:148
+msgid "No articles on this date."
+msgstr "Keine Beiträge an diesem Tag."
+
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:175
+msgid "Title:"
+msgstr "Titel:"
+
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:176
+msgid "Days before:"
+msgstr "Tage zuvor:"
+
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:177
+msgid "Months before:"
+msgstr "Monate zuvor:"
+
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:178
+msgid "Years before:"
+msgstr "Jahre zuvor:"
+
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:179
+msgid "Lookup-range:"
+msgstr "Rückschaudauer:"
+
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:180
+msgid "Show date:"
+msgstr "Zeige Datum an:"
+
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:181
+msgid "Dateformat:"
+msgstr "Datumsformat:"
+
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:182
+msgid "Text, if no article found:"
+msgstr "Text, wenn kein Artikel gefunden:"
+
+#: wp213/wp-content/plugins/a-year-before/ayb_posts.php:183
+msgid "Update"
+msgstr "Aktualisieren"
+
