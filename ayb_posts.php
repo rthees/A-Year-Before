@@ -1,5 +1,13 @@
 <<<<<<< HEAD
 <?php
+/*
+Plugin Name: A Year Before
+Version: 0.8-alpha
+Plugin URI: http://wuerzblog.de/2006/12/27/wordpress-plugin-a-year-before/
+Author: Ralf Thees
+Author URI: http://wuerzblog.de/
+Description: Gibt die Artikel an, die vor einem Jahr oder einer beliebigen Zeitspanne veröffentlicht wurden.
+*/
   /*
    Plugin Name: A Year Before
    Version: 0.8-alpha
@@ -562,5 +570,4 @@
       
       $ayb_posts = new ayb_posts();
       add_action('widgets_init', create_function('', 'return register_widget("ayb_posts");'));
->>>>>>> 8bd797ed3a9c6939f4344a3c07dc016e32700244
 ?>
