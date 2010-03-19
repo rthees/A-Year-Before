@@ -540,8 +540,7 @@ Description: Gibt die Artikel an, die vor einem Jahr oder einer beliebigen Zeits
               echo '<p style="text-align:right;"><label for="' . $this->get_field_id("notfound") . '">' . __('Text, if no article found:', $ayb_posts_domain) . ' <input style="width: 200px;" id="' . $this->get_field_id("notfound") . '" name="' . $this->get_field_name("notfound") . '" type="text" value="' . $notfound . '" /></label></p>';
               echo '<p style="text-align:right;"><label for="' . $this->get_field_id("anniv") . '">' . __('Anniversary-Mode:', $ayb_posts_domain) . ' <input style="width: 15px;" id="' . $this->get_field_id("anniv") . '" name="' . $this->get_field_name("anniv") . '" type="checkbox" value="1" ' . (($anniv == 0) ? '' : 'checked') . ' /></label></p>';
             } //function form($instance)
-          //ENDE function form 
-          
+         
           function update($new_instance, $old_instance)
             {
               $instance = $old_instance;
