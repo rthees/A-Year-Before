@@ -2,7 +2,7 @@
 Contributors: wuerzblog
 Donate link: http://wuerzblog.de/
 Tags: date, posts, history, widget
-Requires at least: 2.0.0
+Requires at least: 2.8.0
 Tested up to: 2.7
 Stable tag: 0.7
 
