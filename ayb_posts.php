@@ -7,6 +7,7 @@ Author: Ralf Thees
 Author URI: http://wuerzblog.de/
 Description: Gibt die Artikel an, die vor einem Jahr oder einer beliebigen Zeitspanne veröffentlicht wurden.
 */
+
 if (!defined('WP_CONTENT_URL'))
     define('WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
 if (!defined('WP_CONTENT_DIR'))
@@ -23,7 +24,7 @@ if (!class_exists('ayb_posts_class'))
 {
     class ayb_posts_class extends WP_Widget
     {
-    var $pattern='<li>Das war am %date%: Lies <a href="%link%" title="%article%">%article%</a> (%date%)</li>';
+        var $pattern = '<li>Das war am %date%: Lies <a href="%link%" title="%article%">%article%</a> (%date%)</li>';
         function ayb_posts_class()
         {
             if (function_exists('register_uninstall_hook'))
@@ -43,12 +44,20 @@ if (!class_exists('ayb_posts_class'))
             delete_option('ayb_posts');
         }
         
-			function pattern_output() {
-				$subpattern_array=array('/\%article\%/','/\%date\%/','/\%link\%/');
-				$var_array=array($this->ptitle,$this->datum,$this->plink);
-		//echo '<h2>'.$this->pattern.'</h2>';
-				return preg_replace($subpattern_array, $var_array, $this->pattern);
-			}        
+        function pattern_output()
+        {
+            $subpattern_array = array(
+                '/\%article\%/',
+                '/\%date\%/',
+                '/\%link\%/'
+            );
+            $var_array        = array(
+                $this->ptitle,
+                $this->datum,
+                $this->plink
+            );
+            return preg_replace($subpattern_array, $var_array, $this->pattern);
+        }
         
         function widget($args, $instance)
         {
@@ -73,7 +82,7 @@ if (!class_exists('ayb_posts_class'))
             $dateformat = $instance["dateformat"];
             $notfound   = $instance["notfound"];
             $range      = $instance["range"];
-            $anniv      = $instance["anniversary"];        
+            $anniv      = $instance["anniversary"];
             
             foreach ($instance as $key => $value)
             {
@@ -112,9 +121,8 @@ if (!class_exists('ayb_posts_class'))
                 } //$key
             } //$instance as $key => $value
             
-            $this->pattern=empty($instance['pattern']) ?'<li>Das war am %date%: Lies <a href="%link%" title="%article%">%article%</a> (%date%)</li>' : $instance['pattern'];
-				$instance['pattern']= $this->pattern;
-				
+            $this->pattern       = empty($instance['pattern']) ? '<li>Das war am %date%: Lies <a href="%link%" title="%article%">%article%</a> (%date%)</li>' : $instance['pattern'];
+            $instance['pattern'] = $this->pattern;
             
             $dateformat = empty($instance['dateformat']) ? 'd.m.Y' : $instance['dateformat'];
             $showdate   = empty($instance['showdate']) ? '1' : $instance['showdate'];
@@ -133,7 +141,6 @@ if (!class_exists('ayb_posts_class'))
             $ayb_tz     = ayb_sgn(get_option('gmt_offset') * (-1)) . get_option('gmt_offset') . " hour";
             $ayb_tz_sec = get_option('gmt_offset') * 360000;
             
-            
             $range_date1 = date("Y-m-d H:i:00", strtotime($ayb_tz, mktime(0, 0, 0, date("m") - $dmonth, date("d") - $dday, date("Y") - $dyear)));
             $range_date2 = date("Y-m-d H:i:00", strtotime($ayb_tz, mktime(23, 59, 59, date("m") - $dmonth, date("d") - $dday + $range, date("Y") - $dyear)));
             
@@ -149,7 +156,7 @@ if (!class_exists('ayb_posts_class'))
                 $q = "SELECT ID, post_title, post_date_gmt FROM $wpdb->posts WHERE post_status='publish' AND post_password='' AND   SUBSTRING(post_date,6,5) = '" . $month_day . "' AND post_date<CURDATE() ORDER BY post_date_gmt DESC";
             }
             $result    = $wpdb->get_results($q, object);
-            $post_date = $post_date_gmt;  
+            $post_date = $post_date_gmt;
             
             if ($result)
             {
@@ -180,11 +187,10 @@ if (!class_exists('ayb_posts_class'))
                     {
                         $ts_date_old = $ts_post_date;
                     }
-                    $this->datum=$pdate;
+                    $this->datum  = $pdate;
                     $this->plink  = get_permalink($post->ID);
                     $this->ptitle = $post->post_title;
-                    $this->ayb_article_list.=$this->pattern_output();
-//                    $this->ayb_article_list .= $before . $pdate . '<a href="' . $plink . '" class="ayb_link">' . $ptitle . '</a>' . $after . "\r";
+                    $this->ayb_article_list .= $this->pattern_output();
                 } //$result as $post
             } //$result
             else
@@ -204,10 +210,9 @@ if (!class_exists('ayb_posts_class'))
                 {
                     $pdate = '<span class="ayb_date">' . date($dateformat, gmmktime(0, 0, 0, date("m"), date("d"), date("Y"))) . "</span> ";
                 }
-                          //     $this->ayb_article_list .= $before . $pdate . '<span class="ayb_notfound">' . $notfound . '</span>' . $after . "\r";
                 $this->ayb_article_list .= $before . $pdate . '<span class="ayb_notfound">' . $notfound . '</span>' . $after . "\r";
-
-            }     
+                
+            }
             
             if ($instance["no_widget"])
             {
@@ -216,7 +221,6 @@ if (!class_exists('ayb_posts_class'))
             else
             {
                 extract($args);
-                //print_r($args);
                 
                 $title = attribute_escape($instance['title']);
                 echo $before_widget . $before_title . $title . $after_title;
@@ -242,7 +246,6 @@ if (!class_exists('ayb_posts_class'))
                 'pattern' => $this->pattern
                 
             );
-            print_r($defaults);
             
             $instance   = wp_parse_args((array) $instance, $defaults);
             $title      = strip_tags($instance['title']);
@@ -253,8 +256,8 @@ if (!class_exists('ayb_posts_class'))
             $dateformat = $instance["dateformat"];
             $notfound   = $instance["notfound"];
             $range      = $instance["range"];
-            $anniv      = $instance["anniversary"];       
-            $pattern      = htmlspecialchars($instance["pattern"]);   
+            $anniv      = $instance["anniversary"];
+            $pattern    = htmlspecialchars($instance["pattern"]);
             
             echo '<p style="text-align:right;"><label for="' . $this->get_field_id("title") . '">' . __('Title:', $ayb_posts_domain) . ' <input style="width: 200px;" id="' . $this->get_field_id('title') . '" name="' . $this->get_field_name('title') . '" type="text" value="' . $title . '" /></label></p>';
             echo '<p style="text-align:right;"><label for="' . $this->get_field_id("day") . '">' . __('Days before:', $ayb_posts_domain) . ' <input style="width: 30px;" id="' . $this->get_field_id("day") . '" name="' . $this->get_field_name("day") . '" type="text" value="' . $day . '" /></label></p>';
@@ -265,8 +268,8 @@ if (!class_exists('ayb_posts_class'))
             echo '<p style="text-align:right;"><label for="' . $this->get_field_id("dateformat") . '">' . __('Dateformat:', $ayb_posts_domain) . ' <input style="width: 55px;" id="' . $this->get_field_id("dateformat") . '" name="' . $this->get_field_name("dateformat") . '" type="text" value="' . $dateformat . '" /></label></p>';
             echo '<p style="text-align:right;"><label for="' . $this->get_field_id("notfound") . '">' . __('Text, if no article found:', $ayb_posts_domain) . ' <input style="width: 200px;" id="' . $this->get_field_id("notfound") . '" name="' . $this->get_field_name("notfound") . '" type="text" value="' . $notfound . '" /></label></p>';
             echo '<p style="text-align:right;"><label for="' . $this->get_field_id("anniv") . '">' . __('Anniversary-Mode:', $ayb_posts_domain) . ' <input style="width: 15px;" id="' . $this->get_field_id("anniv") . '" name="' . $this->get_field_name("anniv") . '" type="checkbox" value="1" ' . (($anniv == 0) ? '' : 'checked') . ' /></label></p>';
-				echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', $ayb_posts_domain) . ' <input style="width: 200px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" type="text" value="' . $pattern . '" /></label></p>';
-              
+            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', $ayb_posts_domain) . ' <input style="width: 200px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" type="text" value="' . $pattern . '" /></label></p>';
+            
         }
         
         
@@ -274,8 +277,7 @@ if (!class_exists('ayb_posts_class'))
         {
             $instance = $old_instance;
             
-            $instance['title'] = strip_tags(stripslashes($new_instance['title']));
-            
+            $instance['title']       = strip_tags(stripslashes($new_instance['title']));
             $instance["day"]         = strip_tags(stripslashes($new_instance['day']));
             $instance["month"]       = strip_tags(stripslashes($new_instance['month']));
             $instance["year"]        = strip_tags(stripslashes($new_instance['year']));
@@ -284,7 +286,7 @@ if (!class_exists('ayb_posts_class'))
             $instance["notfound"]    = strip_tags(stripslashes($new_instance['notfound']));
             $instance["range"]       = strip_tags(stripslashes($new_instance['range']));
             $instance["anniversary"] = strip_tags(stripslashes($new_instance['anniv']));
-            $instance["pattern"] = stripslashes($new_instance['pattern']);
+            $instance["pattern"]     = stripslashes($new_instance['pattern']);
             
             return $instance;
         }
