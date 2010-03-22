@@ -24,12 +24,12 @@ if (!class_exists('ayb_posts_class'))
     class ayb_posts_class extends WP_Widget
     {
         var $pattern = '<li>Das war am %date%: Lies <a href="%link%" title="%article%">%article%</a> (%date%)</li>';
-			var $ayb_posts_domain = 'ayb_posts_lang';  
+			var $ayb_posts_domain = 'ayb_posts';  
 			
 			      
         function ayb_posts_class()
         {
-        		load_plugin_textdomain( 'ayb_posts_lang', false, dirname(plugin_basename(__FILE__)) .  '' );
+        		load_plugin_textdomain( 'ayb_posts', false, dirname(plugin_basename(__FILE__)) .  '' );
 	
             if (function_exists('register_uninstall_hook'))
                 register_uninstall_hook(__FILE__, array(
@@ -125,19 +125,17 @@ if (!class_exists('ayb_posts_class'))
                 } //$key
             } //$instance as $key => $value
             
-            $this->pattern       = empty($instance['pattern']) ? '<li>Das war am %date%: Lies <a href="%link%" title="%article%">%article%</a> (%date%)</li>' : $instance['pattern'];
+            $this->pattern       = empty($instance['pattern']) ? __('<li>Das war am %date%: Lies <a href="%link%" title="%article%">%article%</a> (%date%)</li>', 'ayb_posts') : $instance['pattern'];
             $instance['pattern'] = $this->pattern;
             
-            $dateformat = empty($instance['dateformat']) ? __('Y-m-d', 'ayb_posts_lang') : $instance['dateformat'];
+            $dateformat = empty($instance['dateformat']) ? __('Y-m-d', 'ayb_posts') : $instance['dateformat'];
             $showdate   = empty($instance['showdate']) ? '1' : $instance['showdate'];
-            $notfound   = empty($instance['notfound']) ? __("No articles on this date.", 'ayb_posts_lang') : $instance['notfound'];
+            $notfound   = empty($instance['notfound']) ? __("No articles on this date.", 'ayb_posts') : $instance['notfound'];
             $before     = empty($instance['before']) ? '<li>' : $instance['before'];
             $after      = empty($instance['after']) ? '</li>' : $instance['after'];
             
-            $title          = empty($instance['title']) ? '&nbsp;' : apply_filters('widget_title', $instance['title']);
-            $entry_title    = empty($instance['entry_title']) ? '&nbsp;' : apply_filters('widget_entry_title', $instance['entry_title']);
-            $comments_title = empty($instance['comments_title']) ? '&nbsp;' : apply_filters('widget_comments_title', $instance['comments_title']);
-            
+            $title          = empty($instance['title']) ? __('A year before', 'ayb_posts') : apply_filters('widget_title', $instance['title']);
+             
             if ($dday == 0 && $dmonth == 0 && $dyear == 0)
             {
                 $dyear = 1;
@@ -237,15 +235,15 @@ if (!class_exists('ayb_posts_class'))
         {
             global $ayb_posts_domain;
             $defaults = array(
-                'title' => __("A year before", 'ayb_posts_lang'),
+                'title' => __("A year before", 'ayb_posts'),
                 'day' => '0',
                 'month' => '0',
                 'year' => '1',
                 'range' => '0',
-                'dateformat' => __('Y-m-d', 'ayb_posts_lang'),
+                'dateformat' => __('Y-m-d', 'ayb_posts'),
                 'anniversary' => '0',
                 'showdate' => '1',
-                'notfound' => __('No articles on this date.','ayb_posts_lang'),
+                'notfound' => __('No articles on this date.','ayb_posts'),
                 'pattern' => $this->pattern
                 
             );
@@ -262,16 +260,16 @@ if (!class_exists('ayb_posts_class'))
             $anniv      = $instance["anniversary"];
             $pattern    = htmlspecialchars($instance["pattern"]);
             
-            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("title") . '">' . __('Title:', 'ayb_posts_lang') . ' <input style="width: 200px;" id="' . $this->get_field_id('title') . '" name="' . $this->get_field_name('title') . '" type="text" value="' . $title . '" /></label></p>';
-            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("day") . '">' . __('Days before:', 'ayb_posts_lang') . ' <input style="width: 30px;" id="' . $this->get_field_id("day") . '" name="' . $this->get_field_name("day") . '" type="text" value="' . $day . '" /></label></p>';
-            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("month") . '">' . __('Months before:', 'ayb_posts_lang') . ' <input style="width: 30px;" id="' . $this->get_field_id("month") . '" name="' . $this->get_field_name("month") . '" type="text" value="' . $month . '" /></label></p>';
-            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("year") . '">' . __('Years before:', 'ayb_posts_lang') . ' <input style="width: 30px;" id="' . $this->get_field_id("year") . '" name="' . $this->get_field_name("year") . '" type="text" value="' . $year . '" /></label></p>';
-            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("range") . '">' . __('Lookup-range:', 'ayb_posts_lang') . ' <input style="width: 30px;" id="' . $this->get_field_id("range") . '" name="' . $this->get_field_name("range") . '" type="text" value="' . $range . '" /></label></p>';
-            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("showdate") . '">' . __('Show date:', 'ayb_posts_lang') . ' <input style="width: 15px;" id="' . $this->get_field_id("showdate") . '" name="' . $this->get_field_name("showdate") . '" type="checkbox" value="1"' . (($showdate == 0) ? '' : 'checked') . ' /></label></p>';
-            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("dateformat") . '">' . __('Dateformat:', 'ayb_posts_lang') . ' <input style="width: 55px;" id="' . $this->get_field_id("dateformat") . '" name="' . $this->get_field_name("dateformat") . '" type="text" value="' . $dateformat . '" /></label></p>';
-            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("notfound") . '">' . __('Text, if no article found:', 'ayb_posts_lang') . ' <input style="width: 200px;" id="' . $this->get_field_id("notfound") . '" name="' . $this->get_field_name("notfound") . '" type="text" value="' . $notfound . '" /></label></p>';
-            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("anniv") . '">' . __('Anniversary-Mode:', 'ayb_posts_lang') . ' <input style="width: 15px;" id="' . $this->get_field_id("anniv") . '" name="' . $this->get_field_name("anniv") . '" type="checkbox" value="1" ' . (($anniv == 0) ? '' : 'checked') . ' /></label></p>';
-            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', 'ayb_posts_lang') . ' <input style="width: 200px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" type="text" value="' . $pattern . '" /></label></p>';
+            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("title") . '">' . __('Title:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id('title') . '" name="' . $this->get_field_name('title') . '" type="text" value="' . $title . '" /></label></p>';
+            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("day") . '">' . __('Days before:', 'ayb_posts') . ' <input style="width: 30px;" id="' . $this->get_field_id("day") . '" name="' . $this->get_field_name("day") . '" type="text" value="' . $day . '" /></label></p>';
+            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("month") . '">' . __('Months before:', 'ayb_posts') . ' <input style="width: 30px;" id="' . $this->get_field_id("month") . '" name="' . $this->get_field_name("month") . '" type="text" value="' . $month . '" /></label></p>';
+            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("year") . '">' . __('Years before:', 'ayb_posts') . ' <input style="width: 30px;" id="' . $this->get_field_id("year") . '" name="' . $this->get_field_name("year") . '" type="text" value="' . $year . '" /></label></p>';
+            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("range") . '">' . __('Lookup-range:', 'ayb_posts') . ' <input style="width: 30px;" id="' . $this->get_field_id("range") . '" name="' . $this->get_field_name("range") . '" type="text" value="' . $range . '" /></label></p>';
+            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("showdate") . '">' . __('Show date:', 'ayb_posts') . ' <input style="width: 15px;" id="' . $this->get_field_id("showdate") . '" name="' . $this->get_field_name("showdate") . '" type="checkbox" value="1"' . (($showdate == 0) ? '' : 'checked') . ' /></label></p>';
+            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("dateformat") . '">' . __('Dateformat:', 'ayb_posts') . ' <input style="width: 55px;" id="' . $this->get_field_id("dateformat") . '" name="' . $this->get_field_name("dateformat") . '" type="text" value="' . $dateformat . '" /></label></p>';
+            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("notfound") . '">' . __('Text, if no article found:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id("notfound") . '" name="' . $this->get_field_name("notfound") . '" type="text" value="' . $notfound . '" /></label></p>';
+            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("anniv") . '">' . __('Anniversary-Mode:', 'ayb_posts') . ' <input style="width: 15px;" id="' . $this->get_field_id("anniv") . '" name="' . $this->get_field_name("anniv") . '" type="checkbox" value="1" ' . (($anniv == 0) ? '' : 'checked') . ' /></label></p>';
+            echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" type="text" value="' . $pattern . '" /></label></p>';
         }
         
         
@@ -296,8 +294,6 @@ if (!class_exists('ayb_posts_class'))
 } //!class_exists('ayb_posts_class')
 
 add_action('widgets_init', create_function('', 'return register_widget("ayb_posts_class");'));
-//$plugin_dir = basename(dirname(__FILE__));
-//load_plugin_textdomain( 'ayb_posts_lang', '/wp-content/plugins/' . $plugin_dir, $plugin_dir );
 
 function ayb_posts($ayb_para)
 {
