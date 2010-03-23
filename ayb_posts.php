@@ -86,6 +86,7 @@ if (!class_exists('ayb_posts_class'))
             $dateformat = $instance["dateformat"];
             $notfound   = $instance["notfound"];
             $range      = $instance["range"];
+			$private    = $instance["private"];
             $anniv      = $instance["anniversary"];
             
             foreach ($instance as $key => $value)
@@ -144,26 +145,34 @@ if (!class_exists('ayb_posts_class'))
             $ayb_tz_sec = get_option('gmt_offset') * 360000;
             
             $range_date1 = date("Y-m-d H:i:00", strtotime($ayb_tz, mktime(0, 0, 0, date("m") - $dmonth, date("d") - $dday, date("Y") - $dyear)));
-            $range_date2 = date("Y-m-d H:i:00", strtotime($ayb_tz, mktime(23, 59, 59, date("m") - $dmonth, date("d") - $dday + $range, date("Y") - $dyear)));
+            $range_date2 = date("Y-m-d H:i:59", strtotime($ayb_tz, mktime(23, 59, 59, date("m") - $dmonth, date("d") - $dday + $range, date("Y") - $dyear)));
             
             $month_day = date("m") . "-" . date("d");
          
+			switch ($private) 
+			{
+			case  1: $post_status="(post_status='publish' OR post_status='private')";
+				break;
+			case 2: $post_status="post_status='private'";	
+				break;
+			default: $post_status="post_status='publish'";	
+			} 
             if ($anniv == 0)
             {
-                $q = "SELECT ID, post_title, post_date_gmt FROM $wpdb->posts WHERE post_status='publish' AND post_password='' AND (post_date_gmt >= '" . $range_date1 . "' AND post_date_gmt <= '" . $range_date2 . "') ORDER BY post_date_gmt ASC";
+                $q = "SELECT ID, post_title, post_date_gmt FROM $wpdb->posts WHERE $post_status AND post_password='' AND (post_date_gmt >= '" . $range_date1 . "' AND post_date_gmt <= '" . $range_date2 . "') ORDER BY post_date_gmt ASC";
             } //$anniv == 0
             else
             {
-                $q = "SELECT ID, post_title, post_date_gmt FROM $wpdb->posts WHERE post_status='publish' AND post_password='' AND   SUBSTRING(post_date,6,5) = '" . $month_day . "' AND post_date<CURDATE() ORDER BY post_date_gmt DESC";
+                $q = "SELECT ID, post_title, post_date_gmt FROM $wpdb->posts WHERE $post_status AND post_password='' AND   SUBSTRING(post_date,6,5) = '" . $month_day . "' AND post_date<CURDATE() ORDER BY post_date_gmt DESC";
             }
             $result    = $wpdb->get_results($q, object);
             $post_date = $post_date_gmt;
-            
             if ($result)
             {
                 $post_date    = $result[0]->post_date_gmt;
                 $ts_post_date = gmmktime(0, 0, 0, substr($post_date, 5, 2), substr($post_date, 8, 2), substr($post_date, 0, 4));
                 $ts_date_old  = $ts_post_date;
+
                 foreach ($result as $post)
                 {
                     $post_date = $post->post_date_gmt;
@@ -182,7 +191,7 @@ if (!class_exists('ayb_posts_class'))
                     
                     if ($ts_post_date != $ts_date_old && $range != 0)
                     {
-                        break;
+                        //break;
                     } //$ts_post_date != $ts_date_old && $range != 0
                     else
                     {
@@ -215,6 +224,8 @@ if (!class_exists('ayb_posts_class'))
                 
             }
             
+			
+			
             if ($instance["no_widget"])
             {
                 echo $this->ayb_article_list;
@@ -243,6 +254,7 @@ if (!class_exists('ayb_posts_class'))
                 'dateformat' => __('Y-m-d', 'ayb_posts'),
                 'anniversary' => '0',
                 'showdate' => '1',
+				'private' => '0',
                 'notfound' => __('No articles on this date.','ayb_posts'),
                 'pattern' => $this->pattern
                 
@@ -256,6 +268,7 @@ if (!class_exists('ayb_posts_class'))
             $showdate   = $instance["showdate"];
             $dateformat = $instance["dateformat"];
             $notfound   = $instance["notfound"];
+			$private   = $instance["private"];
             $range      = $instance["range"];
             $anniv      = $instance["anniversary"];
             $pattern    = htmlspecialchars($instance["pattern"]);
@@ -267,6 +280,7 @@ if (!class_exists('ayb_posts_class'))
             echo '<p style="text-align:right;"><label for="' . $this->get_field_id("range") . '">' . __('Lookup-range:', 'ayb_posts') . ' <input style="width: 30px;" id="' . $this->get_field_id("range") . '" name="' . $this->get_field_name("range") . '" type="text" value="' . $range . '" /></label></p>';
             echo '<p style="text-align:right;"><label for="' . $this->get_field_id("showdate") . '">' . __('Show date:', 'ayb_posts') . ' <input style="width: 15px;" id="' . $this->get_field_id("showdate") . '" name="' . $this->get_field_name("showdate") . '" type="checkbox" value="1"' . (($showdate == 0) ? '' : 'checked') . ' /></label></p>';
             echo '<p style="text-align:right;"><label for="' . $this->get_field_id("dateformat") . '">' . __('Dateformat:', 'ayb_posts') . ' <input style="width: 55px;" id="' . $this->get_field_id("dateformat") . '" name="' . $this->get_field_name("dateformat") . '" type="text" value="' . $dateformat . '" /></label></p>';
+			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("private") . '">' . __('Show private articles:', 'ayb_posts') . ' <select id="' . $this->get_field_id("private") . '" name="' . $this->get_field_name("private") . '" ><option value="0"'.(($private==0)?'selected':'').' >'.__('No','ayb_posts').'</option><option value="1"'.(($private==1)?'selected':'').'>'.__('Also','ayb_posts').'</option><option value="2"'.(($private==2)?'selected':'').'>'.__('Only','ayb_posts').'</option></select></label></p>';
             echo '<p style="text-align:right;"><label for="' . $this->get_field_id("notfound") . '">' . __('Text, if no article found:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id("notfound") . '" name="' . $this->get_field_name("notfound") . '" type="text" value="' . $notfound . '" /></label></p>';
             echo '<p style="text-align:right;"><label for="' . $this->get_field_id("anniv") . '">' . __('Anniversary-Mode:', 'ayb_posts') . ' <input style="width: 15px;" id="' . $this->get_field_id("anniv") . '" name="' . $this->get_field_name("anniv") . '" type="checkbox" value="1" ' . (($anniv == 0) ? '' : 'checked') . ' /></label></p>';
             echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" type="text" value="' . $pattern . '" /></label></p>';
@@ -285,6 +299,7 @@ if (!class_exists('ayb_posts_class'))
             $instance["dateformat"]  = strip_tags(stripslashes($new_instance['dateformat']));
             $instance["notfound"]    = strip_tags(stripslashes($new_instance['notfound']));
             $instance["range"]       = strip_tags(stripslashes($new_instance['range']));
+			$instance["private"]     = strip_tags(stripslashes($new_instance['private']));
             $instance["anniversary"] = strip_tags(stripslashes($new_instance['anniv']));
             $instance["pattern"]     = stripslashes($new_instance['pattern']);
             
