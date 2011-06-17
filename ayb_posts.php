@@ -181,7 +181,7 @@ if (!class_exists('ayb_posts_class'))
                     {
                         $post_date         = $post->post_date_gmt;
                         $ts_post_date_comp = gmmktime(substr($post_date, 11, 2), substr($post_date, 14, 2), 0, substr($post_date, 5, 2), substr($post_date, 8, 2), substr($post_date, 0, 4));
-                        $pdate             = '<span class="ayb_date">' . date($dateformat, $ts_post_date_comp) . "</span> ";
+                        $pdate             = '<span class="ayb_date">' . date($dateformat, $ts_post_date_comp) . "</span>";
                     } //$showdate
                     else
                     {
@@ -209,7 +209,7 @@ if (!class_exists('ayb_posts_class'))
                 {
                     if ($showdate)
                     {
-                        $pdate = '<span class="ayb_date">' . date($dateformat, gmmktime(0, 0, 0, date("m") - $dmonth, date("d") - $dday, date("Y") - $dyear)) . "</span> ";
+                        $pdate = '<span class="ayb_date">' . date($dateformat, gmmktime(0, 0, 0, date("m") - $dmonth, date("d") - $dday, date("Y") - $dyear)) . "</span>";
                     } //$showdate
                     else
                     {
@@ -218,9 +218,9 @@ if (!class_exists('ayb_posts_class'))
                 } //!$anniv
                 else
                 {
-                    $pdate = '<span class="ayb_date">' . date($dateformat, gmmktime(0, 0, 0, date("m"), date("d"), date("Y"))) . "</span> ";
+                    $pdate = '<span class="ayb_date">' . date($dateformat, gmmktime(0, 0, 0, date("m"), date("d"), date("Y"))) . "</span>";
                 }
-                $this->ayb_article_list .= $before . $pdate . '<span class="ayb_notfound">' . $notfound . '</span>' . $after . "\r";
+                $this->ayb_article_list .= $before . $pdate . '<span class="ayb_notfound"> ' . $notfound . '</span>' . $after . "\r";
                 
             }
             
