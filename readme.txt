@@ -1,16 +1,16 @@
 === A Year Before ===
 Contributors: wuerzblog
-Donate link: http://wuerzblog.de/
+Donate link: http://flattr.com/thing/313825/Wordpress-Plugin-A-Year-Before
 Tags: date, posts, history, widget
 Requires at least: 2.8.0
 Tested up to: 2.7
 Stable tag: 0.7
 
-»A Year Before« shows a list of articles, which were written a certain time ago. So you can show in a history, what happend in your blog in the past
+"A Year Before" shows a list of articles, which were written a certain time ago. So you can show in a history, what happend in your blog in the past
 
 == Description ==
 
-With »A Year Before« you can show the titles of the articles which were written a certain time ago. So you can show in a »historical corner«, what happend in your blog e.g. 30 days, 6 months or a year before. You can use it as a wordpress-widget or put it in your theme as a php-function with parameters.
+With "A Year Before" you can show the titles of the articles which were written a certain time ago. So you can show in a "historical corner", what happend in your blog e.g. 30 days, 6 months or a year before. You can use it as a wordpress-widget or put it in your theme as a php-function with parameters.
 
 == Installation ==
 
@@ -24,7 +24,7 @@ With »A Year Before« you can show the titles of the articles which were writte
 
 1. Download the plugin and put the file ayb_posts.php in the plugin-folder of your  Wordpress-installation.
 2. Then activate the plugin.
-3. In your template — e.g. the sidebar — you can insert the following PHP-code:
+3. In your template - e.g. the sidebar - you can insert the following PHP-code:
 
 		<?php if (function_exists("ayb_posts")) { ?>
 		<div class="einjahr">
@@ -55,9 +55,9 @@ You can use the following parameters
 * after: piece of HTML to insert after the title of the articles. Default `</li>`
 * range: number of days the plugin will search back in the future (relative to the values of day, month and year above) for an article. Meant as a "round about this day"-feature. Default 0
 * showdate: shows the date (showdate=1) before every title or not (showdate=0)
-* dateformat : dateformat as used by PHP. Default ist the german shortform »d.m.y«
+* dateformat : dateformat as used by PHP. Default ist the german shortform "d.m.y"
 * notfound: the text the plugin will output, if no article is found on the defined date.
-*  anniversary: if set to 1, the plugin will display all articles ever blogged with the same number of day and month. The parameters "day", "month", "year" and "range" will be ignored if used.
+* anniversary: if set to 1, the plugin will display all articles ever blogged with the same number of day and month. The parameters "day", "month", "year" and "range" will be ignored if used.
 
 = Examples =
 
@@ -84,82 +84,89 @@ Since Wordpress 2.7: Deactivate the plugin, then select "delete" in the plugin-p
 
 == Changelog ==
 
-0.7beta11
+= 0.8alpha1 =
+
+* public, private or both articles can be shown
+* OOP-programming
+* use of wordpress's widget-class (plugin works now wordpress 2.8+ only)
+* widget output can be edited with patterns
+
+= 0.7beta11 =
 
 * added uninstall-feature for wordpress 2.7+. if the plugin is deleted, the options of this plugin will be deleted in the wordpress-database.
 
-0.7beta10
+= 0.7beta10 =
 
 * fix: check if functions are already declared (for multiple use of the plugin)
 
-0.7beta9
+= 0.7beta9 =
 
 * unknown changes
 
-0.7beta8
+= 0.7beta8 =
 
 * kicked out debug-messages ... =:-)
 
-0.7beta7
+= 0.7beta7 =
 
 * bit of cleanup
 * make date-calculation gmt-sensitive. the wordpress-timezone-option is used now. should fix problems, where articles, written a few hours (the timezone-difference) before or after midnight are not displayed correctly. 
 * some minor bugfixes
 
-0.7beta4
+= 0.7beta4 =
 
 * adding anniversary-mode. if anniversary=0, all articles matching the current day and the current month will be show, regardless of which year (beside the actual year of course). all settings of day, month, year and range will be ignored.
 
-0.7beta3
+= 0.7beta3 =
 
 * using the wordpress timezone-offset
 
-0.7beta2
+= 0.7beta2 =
 
 *  fixed: plugin generated invalid XHTML in some cases
 
-0.7beta1
+= 0.7beta1 =
 
 * added range-parameter. you can use e.g. year=1&range=7 if you want to look back one year for articles. if no article is found on this day, the plugin will look up to 7 days back and lists the articles of the day the first article was found.
 
-0.6.1
+= 0.6.1 =
 
 * Fix for sidebars not named 'sidebar'
 
-0.6
+= 0.6 =
 
 * Minor clean-up
 
-0.6beta4
+= 0.6beta4 =
 
 * Fixed finding localization files
 
-0.6beta3
+= 0.6beta3 =
 
 * Localization
 * Added german language-file
 
-0.6beta2
+= 0.6beta2 =
 
 * Make sure the non-widget-use of the plugin
 
-0.6beta1
+= 0.6beta1 =
 
 * 'Widgetize' the plugin
 
-0.5.3
+= 0.5.3 =
 
 * XHTML-Bugfix (unnecessary span)
 * Bugfix PHP 5 Error with empty function-parameter
 
-0.5.2
+= 0.5.2 =
 
 * Bugfix for more tolerant date-values (e.g. day > 364). Thanks to AlohaDan for hinting and testing.
 
-0.5.1
+= 0.5.1 =
 
 * Adjustment for MySQL-versions older than MySQL 4.1.1
 
-0.5
+= 0.5 =
 
 * First public beta
