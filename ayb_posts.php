@@ -26,7 +26,7 @@ if (!class_exists('ayb_posts_class'))
 		var $pattern = '<li>Das war am %date%: Lies <a href="%link%" title="%article%">%article%</a> (%date%)</li>';
 		var $ayb_posts_domain = 'ayb_posts';
 			
-		 
+			
 		function ayb_posts_class()
 		{
 			load_plugin_textdomain( 'ayb_posts', false, dirname(plugin_basename(__FILE__)) .  '' );
@@ -77,19 +77,19 @@ if (!class_exists('ayb_posts_class'))
 					if ($number == 0)
 					return "";
 				}
-				
-			function current_time_fixed( $type, $gmt = 0 ) {
-	$t =  ( $gmt ) ? gmdate( 'Y-m-d H:i:s' ) : gmdate( 'Y-m-d H:i:s', ( time() + ( get_option( 'gmt_offset' ) * 3600 ) ) );
-	switch ( $type ) {
-		case 'mysql':
-			return $t;
-			break;
-		case 'timestamp':
-			return strtotime($t);
-			break;
-	}
-}
-				
+
+				function current_time_fixed( $type, $gmt = 0 ) {
+					$t =  ( $gmt ) ? gmdate( 'Y-m-d H:i:s' ) : gmdate( 'Y-m-d H:i:s', ( time() + ( get_option( 'gmt_offset' ) * 3600 ) ) );
+					switch ( $type ) {
+						case 'mysql':
+							return $t;
+							break;
+						case 'timestamp':
+							return strtotime($t);
+							break;
+					}
+				}
+
 			} //!function_exists('ayb_sgn')
 			$title      = $instance['title'];
 			$day        = $instance['day'];
@@ -149,7 +149,7 @@ if (!class_exists('ayb_posts_class'))
 			$after      = empty($instance['after']) ? '</li>' : $instance['after'];
 
 			$title          = empty($instance['title']) ? __('A year before', 'ayb_posts') : apply_filters('widget_title', $instance['title']);
-			 
+
 			if ($dday == 0 && $dmonth == 0 && $dyear == 0)
 			{
 				$dyear = 1;
@@ -162,9 +162,9 @@ if (!class_exists('ayb_posts_class'))
 			$range_date1 = date("Y-m-d H:i:00", strtotime($ayb_tz, mktime(0, 0, 0, date("m",$ts) - $dmonth, date("d",$ts) - $dday, date("Y",$ts) - $dyear)));
 			$range_date2 = date("Y-m-d H:i:59", strtotime($ayb_tz, mktime(23, 59, 59, date("m",$ts) - $dmonth, date("d",$ts) - $dday + $range, date("Y",$ts) - $dyear)));
 
-			
+				
 			$month_day = date("m",$ts) . "-" . date("d",$ts);
-		
+
 			//$month_day= gmdate('m'). "-" . gmdate("d");
 			switch ($private)
 			{
@@ -194,7 +194,7 @@ if (!class_exists('ayb_posts_class'))
 				foreach ($result as $post)
 				{
 					$post_date = $post->post_date_gmt;
-					
+						
 
 					if ($showdate)
 					{
@@ -219,7 +219,7 @@ if (!class_exists('ayb_posts_class'))
 					$this->datum  = $pdate;
 					$this->plink  = get_permalink($post->ID);
 					$this->ptitle = $post->post_title;
-				
+
 					$this->ayb_article_list .= $this->pattern_output();
 				} //$result as $post
 			} //$result
@@ -244,8 +244,8 @@ if (!class_exists('ayb_posts_class'))
 
 			}
 
-				
-				
+
+
 			if ($instance["no_widget"])
 			{
 				echo $this->ayb_article_list;
@@ -293,19 +293,22 @@ if (!class_exists('ayb_posts_class'))
 			$anniv      = $instance["anniversary"];
 			$pattern    = htmlspecialchars($instance["pattern"]);
 
+			echo '<a href="http://flattr.com/thing/313825/Wordpress-Plugin-A-Year-Before" target="_blank">
+<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>';
+				
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("title") . '">' . __('Title:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id('title') . '" name="' . $this->get_field_name('title') . '" type="text" value="' . $title . '" /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("day") . '">' . __('Days before:', 'ayb_posts') . ' <input style="width: 30px;" id="' . $this->get_field_id("day") . '" name="' . $this->get_field_name("day") . '" type="text" value="' . $day . '" /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("month") . '">' . __('Months before:', 'ayb_posts') . ' <input style="width: 30px;" id="' . $this->get_field_id("month") . '" name="' . $this->get_field_name("month") . '" type="text" value="' . $month . '" /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("year") . '">' . __('Years before:', 'ayb_posts') . ' <input style="width: 30px;" id="' . $this->get_field_id("year") . '" name="' . $this->get_field_name("year") . '" type="text" value="' . $year . '" /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("range") . '">' . __('Lookup-range:', 'ayb_posts') . ' <input style="width: 30px;" id="' . $this->get_field_id("range") . '" name="' . $this->get_field_name("range") . '" type="text" value="' . $range . '" /></label></p>';
-			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("showdate") . '">' . __('Show date:', 'ayb_posts') . ' <input style="width: 15px;" id="' . $this->get_field_id("showdate") . '" name="' . $this->get_field_name("showdate") . '" type="checkbox" value="1"' . (($showdate == 0) ? '' : 'checked') . ' /></label></p>';
+			//echo '<p style="text-align:right;"><label for="' . $this->get_field_id("showdate") . '">' . __('Show date:', 'ayb_posts') . ' <input style="width: 15px;" id="' . $this->get_field_id("showdate") . '" name="' . $this->get_field_name("showdate") . '" type="checkbox" value="1"' . (($showdate == 0) ? '' : 'checked') . ' /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("dateformat") . '">' . __('Dateformat:', 'ayb_posts') . ' <input style="width: 55px;" id="' . $this->get_field_id("dateformat") . '" name="' . $this->get_field_name("dateformat") . '" type="text" value="' . $dateformat . '" /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("private") . '">' . __('Show private articles:', 'ayb_posts') . ' <select id="' . $this->get_field_id("private") . '" name="' . $this->get_field_name("private") . '" ><option value="0"'.(($private==0)?'selected':'').' >'.__('No','ayb_posts').'</option><option value="1"'.(($private==1)?'selected':'').'>'.__('Also','ayb_posts').'</option><option value="2"'.(($private==2)?'selected':'').'>'.__('Only','ayb_posts').'</option></select></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("notfound") . '">' . __('Text, if no article found:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id("notfound") . '" name="' . $this->get_field_name("notfound") . '" type="text" value="' . $notfound . '" /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("anniv") . '">' . __('Anniversary-Mode:', 'ayb_posts') . ' <input style="width: 15px;" id="' . $this->get_field_id("anniv") . '" name="' . $this->get_field_name("anniv") . '" type="checkbox" value="1" ' . (($anniv == 0) ? '' : 'checked') . ' /></label></p>';
-			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" type="text" value="' . $pattern . '" /></label></p>';
-			echo '<a href="http://flattr.com/thing/313825/Wordpress-Plugin-A-Year-Before" target="_blank">
-<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>';
+			//echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" type="text" value="' . $pattern . '" /></label></p>';
+			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', 'ayb_posts') . ' <textarea style="width: 220px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" rows="4" />' . $pattern . '</textarea></label></p>';
+
 		}
 
 
