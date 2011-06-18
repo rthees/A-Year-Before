@@ -4,7 +4,7 @@ Donate link: http://flattr.com/thing/313825/Wordpress-Plugin-A-Year-Before
 Tags: date, posts, history, widget
 Requires at least: 2.8.0
 Tested up to: 2.7
-Stable tag: 0.7
+Stable tag: 0.7.1
 
 "A Year Before" shows a list of articles, which were written a certain time ago. So you can show in a history, what happend in your blog in the past
 
