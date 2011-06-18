@@ -1,7 +1,7 @@
 <?php
 /*
  Plugin Name: A Year Before
- Version: 0.8alpha1
+ Version: 0.8alpha2
  Plugin URI: http://wuerzblog.de/2006/12/27/wordpress-plugin-a-year-before/
  Author: Ralf Thees
  Author URI: http://wuerzblog.de/
@@ -77,6 +77,19 @@ if (!class_exists('ayb_posts_class'))
 					if ($number == 0)
 					return "";
 				}
+				
+			function current_time_fixed( $type, $gmt = 0 ) {
+	$t =  ( $gmt ) ? gmdate( 'Y-m-d H:i:s' ) : gmdate( 'Y-m-d H:i:s', ( time() + ( get_option( 'gmt_offset' ) * 3600 ) ) );
+	switch ( $type ) {
+		case 'mysql':
+			return $t;
+			break;
+		case 'timestamp':
+			return strtotime($t);
+			break;
+	}
+}
+				
 			} //!function_exists('ayb_sgn')
 			$title      = $instance['title'];
 			$day        = $instance['day'];
@@ -141,15 +154,18 @@ if (!class_exists('ayb_posts_class'))
 			{
 				$dyear = 1;
 			} //$dday == 0 && $dmonth == 0 && $dyear == 0
-			$ayb_tz     = ayb_sgn(get_option('gmt_offset') * (+1)) . get_option('gmt_offset') . " hour";
-			
+			$ts= current_time_fixed('timestamp',0);
+			//$ayb_tz     = ayb_sgn(get_option('gmt_offset') * (-1)) . get_option('gmt_offset') . " hour";
+			$ayb_tz ="now";
 			$ayb_tz_sec = get_option('gmt_offset') * 360000;
 
-			$range_date1 = date("Y-m-d H:i:00", strtotime($ayb_tz, mktime(0, 0, 0, date("m") - $dmonth, date("d") - $dday, date("Y") - $dyear)));
-			$range_date2 = date("Y-m-d H:i:59", strtotime($ayb_tz, mktime(23, 59, 59, date("m") - $dmonth, date("d") - $dday + $range, date("Y") - $dyear)));
-echo $range_date1;
-			$month_day = date("m") . "-" . date("d");
-			$month_day= gmdate('m'). "-" . gmdate("d");
+			$range_date1 = date("Y-m-d H:i:00", strtotime($ayb_tz, mktime(0, 0, 0, date("m",$ts) - $dmonth, date("d",$ts) - $dday, date("Y",$ts) - $dyear)));
+			$range_date2 = date("Y-m-d H:i:59", strtotime($ayb_tz, mktime(23, 59, 59, date("m",$ts) - $dmonth, date("d",$ts) - $dday + $range, date("Y",$ts) - $dyear)));
+
+			
+			$month_day = date("m",$ts) . "-" . date("d",$ts);
+		
+			//$month_day= gmdate('m'). "-" . gmdate("d");
 			switch ($private)
 			{
 				case  1: $post_status="(post_status='publish' OR post_status='private')";
@@ -166,7 +182,7 @@ echo $range_date1;
 			{
 				$q = "SELECT ID, post_title, post_date_gmt FROM $wpdb->posts WHERE $post_status AND post_password='' AND   SUBSTRING(post_date,6,5) = '" . $month_day . "' AND post_date<CURDATE() ORDER BY post_date_gmt DESC";
 			}
-			echo $q;
+
 			$result    = $wpdb->get_results($q, object);
 			$post_date = $post_date_gmt;
 			if ($result)
@@ -213,7 +229,7 @@ echo $range_date1;
 				{
 					if ($showdate)
 					{
-						$pdate = '<span class="ayb_date">' . date($dateformat, gmmktime(0, 0, 0, date("m") - $dmonth, date("d") - $dday, date("Y") - $dyear)) . "</span>";
+						$pdate = '<span class="ayb_date">' . date($dateformat, gmmktime(0, 0, 0, date("m",$ts) - $dmonth, date("d",$ts) - $dday, date("Y",$ts) - $dyear)) . "</span>";
 					} //$showdate
 					else
 					{
@@ -222,7 +238,7 @@ echo $range_date1;
 				} //!$anniv
 				else
 				{
-					$pdate = '<span class="ayb_date">' . date($dateformat, gmmktime(0, 0, 0, date("m"), date("d"), date("Y"))) . "</span>";
+					$pdate = '<span class="ayb_date">' . date($dateformat, gmmktime(0, 0, 0, date("m",$ts), date("d",$ts), date("Y",$ts))) . "</span>";
 				}
 				$this->ayb_article_list .= $before . $pdate . '<span class="ayb_notfound"> ' . $notfound . '</span>' . $after . "\r";
 
