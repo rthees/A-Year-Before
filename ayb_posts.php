@@ -1,7 +1,7 @@
 <?php
 /*
  Plugin Name: A Year Before
- Version: 0.8-alpha-test
+ Version: 0.8alpha1
  Plugin URI: http://wuerzblog.de/2006/12/27/wordpress-plugin-a-year-before/
  Author: Ralf Thees
  Author URI: http://wuerzblog.de/
@@ -141,14 +141,15 @@ if (!class_exists('ayb_posts_class'))
 			{
 				$dyear = 1;
 			} //$dday == 0 && $dmonth == 0 && $dyear == 0
-			$ayb_tz     = ayb_sgn(get_option('gmt_offset') * (-1)) . get_option('gmt_offset') . " hour";
+			$ayb_tz     = ayb_sgn(get_option('gmt_offset') * (+1)) . get_option('gmt_offset') . " hour";
+			
 			$ayb_tz_sec = get_option('gmt_offset') * 360000;
 
 			$range_date1 = date("Y-m-d H:i:00", strtotime($ayb_tz, mktime(0, 0, 0, date("m") - $dmonth, date("d") - $dday, date("Y") - $dyear)));
 			$range_date2 = date("Y-m-d H:i:59", strtotime($ayb_tz, mktime(23, 59, 59, date("m") - $dmonth, date("d") - $dday + $range, date("Y") - $dyear)));
-
+echo $range_date1;
 			$month_day = date("m") . "-" . date("d");
-			 
+			$month_day= gmdate('m'). "-" . gmdate("d");
 			switch ($private)
 			{
 				case  1: $post_status="(post_status='publish' OR post_status='private')";
@@ -165,6 +166,7 @@ if (!class_exists('ayb_posts_class'))
 			{
 				$q = "SELECT ID, post_title, post_date_gmt FROM $wpdb->posts WHERE $post_status AND post_password='' AND   SUBSTRING(post_date,6,5) = '" . $month_day . "' AND post_date<CURDATE() ORDER BY post_date_gmt DESC";
 			}
+			echo $q;
 			$result    = $wpdb->get_results($q, object);
 			$post_date = $post_date_gmt;
 			if ($result)
@@ -176,6 +178,7 @@ if (!class_exists('ayb_posts_class'))
 				foreach ($result as $post)
 				{
 					$post_date = $post->post_date_gmt;
+					
 
 					if ($showdate)
 					{
@@ -200,6 +203,7 @@ if (!class_exists('ayb_posts_class'))
 					$this->datum  = $pdate;
 					$this->plink  = get_permalink($post->ID);
 					$this->ptitle = $post->post_title;
+				
 					$this->ayb_article_list .= $this->pattern_output();
 				} //$result as $post
 			} //$result
