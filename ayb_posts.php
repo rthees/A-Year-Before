@@ -23,7 +23,7 @@ if (!class_exists('ayb_posts_class'))
 {
 	class ayb_posts_class extends WP_Widget
 	{
-		var $pattern = '<li>Das war am %date%: Lies <a href="%link%" title="%article%">%article%</a> (%date%)</li>';
+		var $pattern = '<li>%date%: <a href="%link%" title="%article%">%article%</a> (%date%)</li>';
 		var $ayb_posts_domain = 'ayb_posts';
 			
 			
@@ -100,6 +100,7 @@ if (!class_exists('ayb_posts_class'))
 			$notfound   = $instance["notfound"];
 			$range      = $instance["range"];
 			$private    = $instance["private"];
+			$showpages    = $instance["showpages"];
 			$anniv      = $instance["anniversary"];
 
 			foreach ($instance as $key => $value)
@@ -174,13 +175,24 @@ if (!class_exists('ayb_posts_class'))
 				break;
 				default: $post_status="post_status='publish'";
 			}
+			
+		switch ($showpages)
+			{
+				case  0: $post_type="post_type<>'page'";
+				break;
+				case  1: $post_type="post_type<>''";
+				break;
+				default: $post_type="post_type<>'page'";
+				
+			}
+			
 			if ($anniv == 0)
 			{
-				$q = "SELECT ID, post_title, post_date_gmt FROM $wpdb->posts WHERE $post_status AND post_password='' AND (post_date_gmt >= '" . $range_date1 . "' AND post_date_gmt <= '" . $range_date2 . "') ORDER BY post_date_gmt ASC";
+				$q = "SELECT ID, post_title, post_date_gmt FROM $wpdb->posts WHERE $post_status AND $post_type AND post_password='' AND (post_date_gmt >= '" . $range_date1 . "' AND post_date_gmt <= '" . $range_date2 . "') ORDER BY post_date_gmt ASC";
 			} //$anniv == 0
 			else
 			{
-				$q = "SELECT ID, post_title, post_date_gmt FROM $wpdb->posts WHERE $post_status AND post_password='' AND   SUBSTRING(post_date,6,5) = '" . $month_day . "' AND post_date<CURDATE() ORDER BY post_date_gmt DESC";
+				$q = "SELECT ID, post_title, post_date_gmt FROM $wpdb->posts WHERE $post_status AND $post_type AND  post_password='' AND   SUBSTRING(post_date,6,5) = '" . $month_day . "' AND post_date<CURDATE() ORDER BY post_date_gmt DESC";
 			}
 
 			$result    = $wpdb->get_results($q, object);
@@ -275,6 +287,7 @@ if (!class_exists('ayb_posts_class'))
                 'anniversary' => '0',
                 'showdate' => '1',
 				'private' => '0',
+				'showpages' => '0',
                 'notfound' => __('No articles on this date.','ayb_posts'),
                 'pattern' => $this->pattern
 
@@ -289,13 +302,12 @@ if (!class_exists('ayb_posts_class'))
 			$dateformat = $instance["dateformat"];
 			$notfound   = $instance["notfound"];
 			$private   = $instance["private"];
+			$showpages   = $instance["showpages"];
 			$range      = $instance["range"];
 			$anniv      = $instance["anniversary"];
 			$pattern    = htmlspecialchars($instance["pattern"]);
 
-			echo '<a href="http://flattr.com/thing/313825/Wordpress-Plugin-A-Year-Before" target="_blank">
-<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>';
-				
+			echo '<a href="http://flattr.com/thing/313825/Wordpress-Plugin-A-Year-Before" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>';			
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("title") . '">' . __('Title:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id('title') . '" name="' . $this->get_field_name('title') . '" type="text" value="' . $title . '" /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("day") . '">' . __('Days before:', 'ayb_posts') . ' <input style="width: 30px;" id="' . $this->get_field_id("day") . '" name="' . $this->get_field_name("day") . '" type="text" value="' . $day . '" /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("month") . '">' . __('Months before:', 'ayb_posts') . ' <input style="width: 30px;" id="' . $this->get_field_id("month") . '" name="' . $this->get_field_name("month") . '" type="text" value="' . $month . '" /></label></p>';
@@ -304,6 +316,8 @@ if (!class_exists('ayb_posts_class'))
 			//echo '<p style="text-align:right;"><label for="' . $this->get_field_id("showdate") . '">' . __('Show date:', 'ayb_posts') . ' <input style="width: 15px;" id="' . $this->get_field_id("showdate") . '" name="' . $this->get_field_name("showdate") . '" type="checkbox" value="1"' . (($showdate == 0) ? '' : 'checked') . ' /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("dateformat") . '">' . __('Dateformat:', 'ayb_posts') . ' <input style="width: 55px;" id="' . $this->get_field_id("dateformat") . '" name="' . $this->get_field_name("dateformat") . '" type="text" value="' . $dateformat . '" /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("private") . '">' . __('Public or private articles?:', 'ayb_posts') . ' <select id="' . $this->get_field_id("private") . '" name="' . $this->get_field_name("private") . '" ><option value="0"'.(($private==0)?'selected':'').' >'.__('Only public','ayb_posts').'</option><option value="1"'.(($private==1)?'selected':'').'>'.__('Both','ayb_posts').'</option><option value="2"'.(($private==2)?'selected':'').'>'.__('Only private','ayb_posts').'</option></select></label></p>';
+			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("showpages") . '">' . __('Show pages?:', 'ayb_posts') . ' <select id="' . $this->get_field_id("showpages") . '" name="' . $this->get_field_name("showpages") . '" ><option value="0"'.(($showpages==0)?'selected':'').' >'.__('No','ayb_posts').'</option><option value="1"'.(($showpages==1)?'selected':'').'>'.__('Yes','ayb_posts').'</option></select></label></p>';
+			
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("notfound") . '">' . __('Text, if no article found:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id("notfound") . '" name="' . $this->get_field_name("notfound") . '" type="text" value="' . $notfound . '" /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("anniv") . '">' . __('Anniversary-Mode:', 'ayb_posts') . ' <input style="width: 15px;" id="' . $this->get_field_id("anniv") . '" name="' . $this->get_field_name("anniv") . '" type="checkbox" value="1" ' . (($anniv == 0) ? '' : 'checked') . ' /></label></p>';
 			//echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" type="text" value="' . $pattern . '" /></label></p>';
@@ -325,6 +339,7 @@ if (!class_exists('ayb_posts_class'))
 			$instance["notfound"]    = strip_tags(stripslashes($new_instance['notfound']));
 			$instance["range"]       = strip_tags(stripslashes($new_instance['range']));
 			$instance["private"]     = strip_tags(stripslashes($new_instance['private']));
+			$instance["showpages"]    = strip_tags(stripslashes($new_instance['showpages']));
 			$instance["anniversary"] = strip_tags(stripslashes($new_instance['anniv']));
 			$instance["pattern"]     = stripslashes($new_instance['pattern']);
 
