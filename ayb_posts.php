@@ -307,7 +307,7 @@ if (!class_exists('ayb_posts_class'))
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("notfound") . '">' . __('Text, if no article found:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id("notfound") . '" name="' . $this->get_field_name("notfound") . '" type="text" value="' . $notfound . '" /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("anniv") . '">' . __('Anniversary-Mode:', 'ayb_posts') . ' <input style="width: 15px;" id="' . $this->get_field_id("anniv") . '" name="' . $this->get_field_name("anniv") . '" type="checkbox" value="1" ' . (($anniv == 0) ? '' : 'checked') . ' /></label></p>';
 			//echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" type="text" value="' . $pattern . '" /></label></p>';
-			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', 'ayb_posts') . ' <textarea style="width: 220px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" rows="4" />' . $pattern . '</textarea></label></p>';
+			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', 'ayb_posts') . ' <textarea style="width: 220px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" rows="4" >' . $pattern . '</textarea></label></p>';
 
 		}
 
