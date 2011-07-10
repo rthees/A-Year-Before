@@ -40,6 +40,12 @@ With "A Year Before" you can show the titles of the articles which were written 
 = Using the widget =
 
 Just click on the configuration-button of the widget an use the selfexplaining popup-dialog.
+Use the output-pattern to define the look of the found articles. Possible patterns are:
+
+* %title% The title of the article
+* %link% The link to the article
+* %date% The date of the article
+* %excerpt% The excerpt of the article. You can define the number of displayed characters bei appending the number like %excerpt80%, which will display 80 characters.
 
 = Not using the widget =
 
@@ -83,6 +89,11 @@ Before Wordpress 2.6.1: Delete the a-year-before-folder from the wordpress-plugi
 Since Wordpress 2.7: Deactivate the plugin, then select "delete" in the plugin-panel. The files *and* the options of this plugin will be deleted. Thank you for using "a year before". ;-)
 
 == Changelog ==
+
+= 0.8alpha2 =
+
+* show pages or not
+* pattern for excerpt (thanks to Marcus from themenfreund.de)
 
 = 0.8alpha1 =
 
