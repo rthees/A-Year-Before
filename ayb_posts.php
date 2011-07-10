@@ -25,6 +25,7 @@ if (!class_exists('ayb_posts_class'))
 	{
 		var $pattern = '<li>%date%: <a href="%link%" title="%article%">%article%</a> (%date%)</li>';
 		var $ayb_posts_domain = 'ayb_posts';
+		var $excerpt_length=140;
 			
 			
 		function ayb_posts_class()
@@ -51,16 +52,21 @@ if (!class_exists('ayb_posts_class'))
 		function pattern_output()
 		{
 			$subpattern_array = array(
-                '/\%article\%/',
+                '/\%title\%/',
                 '/\%date\%/',
-                '/\%link\%/'
+                '/\%link\%/',
+				'/\%excerpt(\d*)\%/'
                 );
                 $var_array        = array(
                 $this->ptitle,
                 $this->datum,
-                $this->plink
+                $this->plink,
+                $this->excerpt
                 );
-                return preg_replace($subpattern_array, $var_array, $this->pattern);
+                $r= preg_replace($subpattern_array, $var_array, $this->pattern);
+                
+                
+                return $r;
 		}
 
 		function widget($args, $instance)
@@ -142,13 +148,16 @@ if (!class_exists('ayb_posts_class'))
 
 			$this->pattern       = empty($instance['pattern']) ? __('<li>Das war am %date%: Lies <a href="%link%" title="%article%">%article%</a> (%date%)</li>', 'ayb_posts') : $instance['pattern'];
 			$instance['pattern'] = $this->pattern;
+			
+			$ex=preg_match('/\%excerpt(\d*)\%/',$this->pattern,$matches);
+			if ($matches[1]>0) $this->excerpt_length=$matches[1];
 
 			$dateformat = empty($instance['dateformat']) ? __('Y-m-d', 'ayb_posts') : $instance['dateformat'];
 			$showdate   = empty($instance['showdate']) ? '1' : $instance['showdate'];
 			$notfound   = empty($instance['notfound']) ? __("No articles on this date.", 'ayb_posts') : $instance['notfound'];
 			$before     = empty($instance['before']) ? '<li>' : $instance['before'];
 			$after      = empty($instance['after']) ? '</li>' : $instance['after'];
-
+			$excerpt_length      = empty($instance['excerpt_length']) ? 140 : $instance['excerpt_length'];
 			$title          = empty($instance['title']) ? __('A year before', 'ayb_posts') : apply_filters('widget_title', $instance['title']);
 
 			if ($dday == 0 && $dmonth == 0 && $dyear == 0)
@@ -188,11 +197,11 @@ if (!class_exists('ayb_posts_class'))
 			
 			if ($anniv == 0)
 			{
-				$q = "SELECT ID, post_title, post_date_gmt FROM $wpdb->posts WHERE $post_status AND $post_type AND post_password='' AND (post_date_gmt >= '" . $range_date1 . "' AND post_date_gmt <= '" . $range_date2 . "') ORDER BY post_date_gmt ASC";
+				$q = "SELECT ID, post_content, post_excerpt, post_title, post_date_gmt FROM $wpdb->posts WHERE $post_status AND $post_type AND post_password='' AND (post_date_gmt >= '" . $range_date1 . "' AND post_date_gmt <= '" . $range_date2 . "') ORDER BY post_date_gmt ASC";
 			} //$anniv == 0
 			else
 			{
-				$q = "SELECT ID, post_title, post_date_gmt FROM $wpdb->posts WHERE $post_status AND $post_type AND  post_password='' AND   SUBSTRING(post_date,6,5) = '" . $month_day . "' AND post_date<CURDATE() ORDER BY post_date_gmt DESC";
+				$q = "SELECT ID, post_content, post_excerpt, post_title, post_date_gmt FROM $wpdb->posts WHERE $post_status AND $post_type AND  post_password='' AND   SUBSTRING(post_date,6,5) = '" . $month_day . "' AND post_date<CURDATE() ORDER BY post_date_gmt DESC";
 			}
 
 			$result    = $wpdb->get_results($q, object);
@@ -206,7 +215,8 @@ if (!class_exists('ayb_posts_class'))
 				foreach ($result as $post)
 				{
 					$post_date = $post->post_date_gmt;
-						
+					$this->excerpt=$post->post_excerpt;
+					if (empty($this->excerpt)) $this->excerpt= wp_html_excerpt(htmlspecialchars(strip_tags($post->post_content)),$this->excerpt_length)." &hellip;";	
 
 					if ($showdate)
 					{
@@ -231,8 +241,10 @@ if (!class_exists('ayb_posts_class'))
 					$this->datum  = $pdate;
 					$this->plink  = get_permalink($post->ID);
 					$this->ptitle = $post->post_title;
+					
 
 					$this->ayb_article_list .= $this->pattern_output();
+					
 				} //$result as $post
 			} //$result
 			else
@@ -321,7 +333,7 @@ if (!class_exists('ayb_posts_class'))
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("notfound") . '">' . __('Text, if no article found:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id("notfound") . '" name="' . $this->get_field_name("notfound") . '" type="text" value="' . $notfound . '" /></label></p>';
 			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("anniv") . '">' . __('Anniversary-Mode:', 'ayb_posts') . ' <input style="width: 15px;" id="' . $this->get_field_id("anniv") . '" name="' . $this->get_field_name("anniv") . '" type="checkbox" value="1" ' . (($anniv == 0) ? '' : 'checked') . ' /></label></p>';
 			//echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', 'ayb_posts') . ' <input style="width: 200px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" type="text" value="' . $pattern . '" /></label></p>';
-			echo '<p style="text-align:right;"><label for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', 'ayb_posts') . ' <textarea style="width: 220px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" rows="4" >' . $pattern . '</textarea></label></p>';
+			echo '<p style="text-align:right;"><label title="Use %title%, %date%, %link%, %excerpt%" for="' . $this->get_field_id("pattern") . '">' . __('Output-pattern:', 'ayb_posts') . ' <textarea style="width: 220px;" id="' . $this->get_field_id("pattern") . '" name="' . $this->get_field_name("pattern") . '" rows="4" >' . $pattern . '</textarea></label></p>';
 
 		}
 
