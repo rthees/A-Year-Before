@@ -93,7 +93,7 @@ Since Wordpress 2.7: Deactivate the plugin, then select "delete" in the plugin-p
 = 0.8alpha2 =
 
 * show pages or not
-* pattern for excerpt (thanks to Marcus from themenfreund.de)
+* pattern for excerpt (thanks to Marcus from themenfreund.de for the idea)
 
 = 0.8alpha1 =
 
