@@ -93,10 +93,15 @@ Deactivate the plugin, then select "delete" in the plugin-panel. The files *and*
 
 == Upgrade Notice ==
 
-= 0.9.4 =
-Fix (again): Sometimes other post-types (like menu-items) were shown.
+= 0.9.5 =
+
+Fixed some PHP-Notices (Patch by lostfocus)
 
 == Changelog ==
+
+= 0.9.5 =
+
+Fixed some PHP-Notices (Patch by lostfocus https://gist.github.com/lostfocus/a68f0689d20feceb7911 )
 
 = 0.9.4 =
 Fix (again): Again sometimes other post-types (like menu-items) were shown.

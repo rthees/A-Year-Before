@@ -35,7 +35,7 @@ if (!class_exists('ayb_posts_class')) {
 			load_plugin_textdomain('ayb_posts', false, dirname(plugin_basename(__FILE__)) . '');
 
 			if (function_exists('register_uninstall_hook'))
-				register_uninstall_hook(__FILE__, array(&$this, 'on_delete'));
+				register_uninstall_hook(__FILE__, array('ayb_posts_class', 'on_delete'));
 			$widget_ops = array('classname' => 'ayb_posts', 'description' => __('Show articles a certain periode of time before', 'ayb_posts'));
 			$this -> WP_Widget('ayb_posts', __('A Year Before'), $widget_ops);
 			add_filter('plugin_row_meta', array($this, 'ayb_set_plugin_meta'), 10, 2);
@@ -213,7 +213,7 @@ if (!class_exists('ayb_posts_class')) {
 			}
 
 			$result = $wpdb -> get_results($q, object);
-			$post_date = $post_date_gmt;
+			$post_date = $post_date_gmt = false;
 			if ($result) {
 
 				$post_date = $result[0] -> post_date_gmt;
@@ -276,13 +276,13 @@ if (!class_exists('ayb_posts_class')) {
 
 			}
 
-			if ($instance["no_widget"]) {
+			if (isset($instance["no_widget"]) && $instance["no_widget"]) {
 				echo $this -> ayb_article_list;
 			}//$instance["no_widget"]
 			else {
 				extract($args);
 
-				$title = attribute_escape($instance['title']);
+				$title = esc_attr($instance['title']);
 				echo $before_widget . $before_title . $title . $after_title;
 				echo '<ul>' . $this -> ayb_article_list . '</ul>';
 				echo $after_widget;
